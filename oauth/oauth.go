@@ -1,8 +1,14 @@
 package oauth
 
 import (
-	"github.com/mercadolibre/golang-restclient/rest"
+	"net/http"
 	"time"
+
+	"github.com/mercadolibre/golang-restclient/rest"
+)
+
+const (
+	headerXPublic = "X-Public"
 )
 
 var oauthRestClient = rest.RequestBuilder{
@@ -10,7 +16,15 @@ var oauthRestClient = rest.RequestBuilder{
 	Timeout: 200 * time.Millisecond,
 }
 
+
 type accessToken struct {
 	Id     string `json:"id"`
 	UserId int64  `json:"user_id"`
+}
+
+func IsPublic(request *http.Request) bool {
+	if request == nil {
+		return true
+	}
+	return request.Header.Get(headerXPublic) == "true"
 }
