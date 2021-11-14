@@ -16,6 +16,12 @@ var oauthRestClient = rest.RequestBuilder{
 	Timeout: 200 * time.Millisecond,
 }
 
+
+type accessToken struct {
+	Id     string `json:"id"`
+	UserId int64  `json:"user_id"`
+}
+
 func IsPublic(request *http.Request) bool {
 	if request == nil {
 		return true
