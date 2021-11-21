@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"moku-moku-oauth-go/oauth/errors"
@@ -32,6 +33,29 @@ func IsPublic(request *http.Request) bool {
 		return true
 	}
 	return request.Header.Get(headerXPublic) == "true"
+}
+
+func AuthenticateRequest(request *http.Request) *errors.RestErr {
+	if request == nil {
+		return nil
+	}
+
+	cleanRequest(request)
+
+	accessTokenId := strings.TrimSpace(request.URL.Query().Get(paramAccessToken))
+	if accessTokenId == "" {
+		return nil
+	}
+
+	at, err := getAccessToken(accessTokenId)
+	if err != nil {
+		if err.Status == http.StatusNotFound {
+			return nil
+		}
+		return err
+	}
+	request.Header.Add(headerXCallerId, fmt.Sprintf("%v", at.UserId))
+	return nil
 }
 
 func cleanRequest(request *http.Request) {
