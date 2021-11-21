@@ -8,14 +8,15 @@ import (
 )
 
 const (
-	headerXPublic = "X-Public"
+	headerXPublic    = "X-Public"
+	headerXCallerId  = "X-Caller-Id"
+	paramAccessToken = "access_token"
 )
 
 var oauthRestClient = rest.RequestBuilder{
 	BaseURL: "http://localhost:8080",
 	Timeout: 200 * time.Millisecond,
 }
-
 
 type accessToken struct {
 	Id     string `json:"id"`
@@ -27,4 +28,12 @@ func IsPublic(request *http.Request) bool {
 		return true
 	}
 	return request.Header.Get(headerXPublic) == "true"
+}
+
+func cleanRequest(request *http.Request) {
+	if request == nil {
+		return
+	}
+
+	request.Header.Del(headerXCallerId)
 }
