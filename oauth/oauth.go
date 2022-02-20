@@ -13,9 +13,8 @@ import (
 )
 
 const (
-	headerXPublic    = "X-Public"
-	headerXCallerId  = "X-Caller-Id"
-	paramAccessToken = "access_token"
+	headerXPublic     = "X-Public"
+	headerAccessToken = "access_token"
 )
 
 var oauthRestClient = rest.RequestBuilder{
@@ -40,30 +39,19 @@ func AuthenticateRequest(request *http.Request) *errors.RestErr {
 		return nil
 	}
 
-	cleanRequest(request)
-
-	accessTokenId := strings.TrimSpace(request.URL.Query().Get(paramAccessToken))
+	accessTokenId := strings.TrimSpace(request.Header.Get(headerAccessToken))
 	if accessTokenId == "" {
 		return nil
 	}
 
-	at, err := getAccessToken(accessTokenId)
+	_, err := getAccessToken(accessTokenId)
 	if err != nil {
 		if err.Status == http.StatusNotFound {
 			return nil
 		}
 		return err
 	}
-	request.Header.Add(headerXCallerId, fmt.Sprintf("%v", at.UserId))
 	return nil
-}
-
-func cleanRequest(request *http.Request) {
-	if request == nil {
-		return
-	}
-
-	request.Header.Del(headerXCallerId)
 }
 
 func getAccessToken(accessTokenId string) (*accessToken, *errors.RestErr) {
