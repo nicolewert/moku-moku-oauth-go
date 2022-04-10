@@ -1,4 +1,4 @@
-module moku-moku-oauth-go
+module github.com/nicolewert/moku-moku-oauth-go
 
 go 1.16
 
