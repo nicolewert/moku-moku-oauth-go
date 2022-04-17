@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"moku-moku-oauth-go/oauth/errors"
+	"github.com/nicolewert/moku-moku-oauth-go/oauth/errors"
 
 	"github.com/mercadolibre/golang-restclient/rest"
 )
@@ -27,12 +27,12 @@ type accessToken struct {
 	UserId int64  `json:"user_id"`
 }
 
-func IsPublic(request *http.Request) bool {
-	if request == nil {
-		return true
-	}
-	return request.Header.Get(headerXPublic) == "true"
-}
+// func IsPublic(request *http.Request) bool {
+// 	if request == nil {
+// 		return true
+// 	}
+// 	return request.Header.Get(headerXPublic) == "true"
+// }
 
 func AuthenticateRequest(request *http.Request) *errors.RestErr {
 	if request == nil {
