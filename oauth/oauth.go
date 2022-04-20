@@ -14,7 +14,7 @@ import (
 
 const (
 	headerXPublic     = "X-Public"
-	headerAccessToken = "access_token"
+	headerAccessToken = "Access_Token"
 )
 
 var oauthRestClient = rest.RequestBuilder{
