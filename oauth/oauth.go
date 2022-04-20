@@ -36,18 +36,18 @@ type accessToken struct {
 
 func AuthenticateRequest(request *http.Request) *errors.RestErr {
 	if request == nil {
-		return nil
+		return errors.InternalServerError("No request provided to authenticate")
 	}
 
 	accessTokenId := strings.TrimSpace(request.Header.Get(headerAccessToken))
 	if accessTokenId == "" {
-		return nil
+		return errors.BadRequest("No token provided")
 	}
 
 	_, err := getAccessToken(accessTokenId)
 	if err != nil {
 		if err.Status == http.StatusNotFound {
-			return nil
+			return errors.BadRequest("Invalid token")
 		}
 		return err
 	}
